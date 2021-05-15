@@ -1,7 +1,8 @@
 (ns lovelace.databases.requests
   (:require [clj-http.client :as http]
             [cheshire.core :as json]
-            [lovelace.databases.specs :refer [validate-db-query]]))
+            [lovelace.databases.specs :refer [validate-db-query]]
+            [lovelace.utils :refer [make-request]]))
 
 (defn fetch-database
   "Makes a GET request to Notion's database API and retrieves the data from a database.
@@ -9,7 +10,7 @@
   [token id]
   (http/get
    (str "https://api.notion.com/v1/databases/" id)
-   {:headers {"Authorization" (str "Bearer " token)}}))
+   (make-request token)))
 
 (defn get-database
   "Retrieves data from a database based off of it's unique id.
@@ -23,9 +24,7 @@
   [token id data]
   (http/post
    (str "https://api.notion.com/v1/databases/" id "/query")
-   {:headers {"Authorization" (str "Bearer " token)}
-    :content-type :json
-    :body data}))
+   (make-request token data)))
 
 (defn query-database
   "Queries a Notion database. Takes the authentication token, the database's id and a query as parameters"

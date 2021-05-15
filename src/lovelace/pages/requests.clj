@@ -1,7 +1,8 @@
 (ns lovelace.pages.requests
   (:require [clj-http.client :as http]
             [cheshire.core :as json]
-            [lovelace.pages.specs :refer [validate-page-creation]]))
+            [lovelace.pages.specs :refer [validate-page-creation]]
+            [lovelace.utils :refer [make-request]]))
 
 (defn get-page
   "Makes a GET request to Notion's API to retrieve data from a page.
@@ -9,7 +10,7 @@
   [token id]
   (http/get
    (str "https://api.notion.com/v1/pages/" id)
-   {:headers {"Authorization" (str "Bearer " token)}}))
+   (make-request token)))
 
 (defn retrieve-page
   "Retrieves a page's data from Notion. Takes the authentication token and the page's unique id as parameters"
@@ -22,9 +23,7 @@
   [token data]
   (http/post
    "https://api.notion.com/v1/pages/"
-   {:headers {"Authorization" (str "Bearer " token)}
-    :content-type :json
-    :body data}))
+   (make-request token data)))
 
 (defn create-page
   "Creates a new page in Notion.
@@ -40,9 +39,7 @@
   [token id data]
   (http/patch
    (str "https://api.notion.com/v1/pages/" id)
-   {:headers {"Authorization" (str "Bearer " token)}
-    :content-type :json
-    :body data}))
+   (make-request token data)))
 
 (defn update-page
   "Update a page's properties based off of it's unique id.

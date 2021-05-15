@@ -1,6 +1,7 @@
 (ns lovelace.users.requests
   (:require [clj-http.client :as http]
-            [cheshire.core :as json]))
+            [cheshire.core :as json]
+            [lovelace.utils :refer [make-request]]))
 
 (defn fetch-users
   "Makes a GET request to Notion's API. Takes `token` or `token` and `id` as parameters.
@@ -8,11 +9,11 @@
   ([token]
    (http/get
     "https://api.notion.com/v1/users/"
-    {:headers {"Authorization" (str "Bearer " token)}}))
+    (make-request token)))
   ([token id]
    (http/get
     (str "https://api.notion.com/v1/users/" id)
-    {:headers {"Authorization" (str "Bearer " token)}})))
+    (make-request token))))
 
 (defn get-all-users
   "Retrieves a list of users of a given workspace. Takes the authentication token as a parameter."

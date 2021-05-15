@@ -1,7 +1,8 @@
 (ns lovelace.blocks.requests
   (:require [clj-http.client :as http]
             [cheshire.core :as json]
-            [lovelace.blocks.specs :refer [validate-page-size validate-block-body]]))
+            [lovelace.blocks.specs :refer [validate-page-size validate-block-body]]
+            [lovelace.utils :refer [make-request]]))
 
 (defn get-block
   "Makes a GET request to Notion's block API and retrieves the data from a block.
@@ -9,7 +10,7 @@
   [token id page-size]
   (http/get
    (str "https://api.notion.com/v1/blocks/" id "/children?page_size=" page-size)
-   {:headers {"Authorization" (str "Bearer " token)}}))
+   (make-request token)))
 
 (defn retrieve-block
   "Retrieves data/children from a block.
@@ -25,9 +26,7 @@
   [token id data]
   (http/patch
    (str "https://api.notion.com/v1/blocks/" id "/children")
-   {:headers {"Authorization" (str "Bearer " token)}
-    :content-type :json
-    :body data}))
+   (make-request token data)))
 
 (defn append-block-children
   "Appends children to a block based off of it's id.
