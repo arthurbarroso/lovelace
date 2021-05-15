@@ -2,6 +2,8 @@
 
 Lovelace is a library designed to act as a Clojure wrapper around [Notion's API](https://developers.notion.com/reference/intro). It uses [clj-http](https://github.com/dakrone/clj-http), [clojure.spec](https://clojure.org/guides/spec) and [cheshire](https://github.com/dakrone/cheshire)
 
+Available under `[org.clojars.arthurbarroso/lovelace "0.1.2"]`
+
 ## Example usage
 ```clojure
 (ns cml.core
@@ -21,11 +23,15 @@ Lovelace is a library designed to act as a Clojure wrapper around [Notion's API]
   (search/search my-token {:query "Media article"})
   (blocks/retrieve-block-children my-token my-block-id 100)
   (blocks/append-block-children my-token my-block-id
-                                {:children [{:object "block" :type "heading_2" :heading_2 {:text [{:type "text" :text {:content "chiclete"}}]}}]})
-  (pages/create-page my-token {:parent {:database_id my-db-id} :properties {:Name {:title [{:text {:content "New Media Article"}}]}}})
+                                {:children [{:object "block"
+                                :type "heading_2"
+                                :heading_2 {:text [{:type "text" :text {:content "chiclete"}}]}}]})
+  (pages/create-page my-token {:parent {:database_id my-db-id}
+                                :properties {:Name {:title [{:text {:content "New Media Article"}}]}}})
   (pages/create-page my-token {:parent {:database_id my-db-id}
                                :properties {:Name {:title [{:text {:content "New Media Article"}}]}}
-                               :children [{:object "block" :type "heading_2" :heading_2 {:text [{:type "text" :text {:content "chiclete"}}]}}]})
+                               :children [
+                               {:object "block" :type "heading_2" :heading_2 {:text [{:type "text" :text {:content "chiclete"}}]}}]})
   (pages/retrieve-page my-token my-page-id)
   (pages/update-page my-token my-page-id {:Status {:select {:name "Reading"}}})
   (databases/retrieve-database my-token my-db-id)
