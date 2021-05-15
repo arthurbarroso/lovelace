@@ -1,22 +1,7 @@
 (ns lovelace.databases.requests
-  (:require [clj-http.client :as http]
-            [cheshire.core :as json]
+  (:require [cheshire.core :as json]
             [lovelace.databases.specs :refer [validate-db-query]]
-            [lovelace.utils :refer [make-request]]))
-
-(defn safe-get [url req]
-  (try
-    (http/get
-     url
-     req)
-    (catch Exception e {:error (.getMessage e)})))
-
-(defn safe-post [url req]
-  (try
-    (http/post
-     url
-     req)
-    (catch Exception e {:error (.getMessage e)})))
+            [lovelace.utils :refer [make-request safe-get safe-post]]))
 
 (defn fetch-database
   "Makes a GET request to Notion's database API and retrieves the data from a database.
