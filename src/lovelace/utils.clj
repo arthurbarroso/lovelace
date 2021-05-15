@@ -26,3 +26,10 @@
      url
      req)
     (catch Exception e {:error (.getMessage e)})))
+
+(defn safe-patch [url req]
+  (try
+    (http/patch
+     url
+     req)
+    (catch Exception e {:error (.getMessage e)})))
