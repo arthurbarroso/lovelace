@@ -22,3 +22,13 @@
   (if (validate-page-creation body)
     (json/parse-string (:body (post-page token (json/encode body))) true)
     {:error "page-body doesn't match the page spec"}))
+
+(defn patch-page [token id data]
+  (http/patch
+   (str "https://api.notion.com/v1/pages/" id)
+   {:headers {"Authorization" (str "Bearer " token)}
+    :content-type :json
+    :body data}))
+
+(defn update-page [token id body]
+  (json/parse-string (:body (patch-page token id (json/encode body))) true))
