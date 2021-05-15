@@ -1,6 +1,6 @@
 # lovelace
 
-A Clojure library designed to ... well, that part is up to you.
+Lovelace is a library designed to act as a Clojure wrapper around Notion's API
 
 ## Usage
 
