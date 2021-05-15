@@ -3,6 +3,8 @@
             [cheshire.core :as json]))
 
 (defn fetch-users
+  "Makes a GET request to Notion's API. Takes `token` or `token` and `id` as parameters.
+  When used without the `id` parameter fetches all users, whilst when `id` is included fetches that single user"
   ([token]
    (http/get
     "https://api.notion.com/v1/users/"
@@ -12,17 +14,12 @@
     (str "https://api.notion.com/v1/users/" id)
     {:headers {"Authorization" (str "Bearer " token)}})))
 
-(defn get-all-users [token]
-  (let [response (fetch-users token)
-        parsed-response (json/parse-string (get-in response [:body]) true)
-        results (:results parsed-response)
-        has_more (:has_more parsed-response)
-        next_cursor (:next_cursor parsed-response)]
-    {:results results
-     :has_more has_more
-     :next_cursor next_cursor}))
+(defn get-all-users
+  "Retrieves a list of users of a given workspace. Takes the authentication token as a parameter."
+  [token]
+  (json/parse-string (:body (fetch-users token)) true))
 
-(defn get-single-user [token id]
-  (let [response (fetch-users token id)
-        parsed-response (json/parse-string (get-in response [:body]) true)]
-    {:results parsed-response}))
+(defn get-single-user
+  "Retrieves a single users of a given workspace. Takes the authentication token and the user's id as parameters."
+  [token id]
+  (json/parse-string (:body (fetch-users token id)) true))

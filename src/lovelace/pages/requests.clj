@@ -3,32 +3,49 @@
             [cheshire.core :as json]
             [lovelace.pages.specs :refer [validate-page-creation]]))
 
-(defn get-page [token id]
+(defn get-page
+  "Makes a GET request to Notion's API to retrieve data from a page.
+  Takes in the authentication token and the page id as parameters"
+  [token id]
   (http/get
    (str "https://api.notion.com/v1/pages/" id)
    {:headers {"Authorization" (str "Bearer " token)}}))
 
-(defn retrieve-page [token id]
+(defn retrieve-page
+  "Retrieves a page's data from Notion. Takes the authentication token and the page's unique id as parameters"
+  [token id]
   (json/parse-string (:body (get-page token id)) true))
 
-(defn post-page [token data]
+(defn post-page
+  "Makes a POST request to Notion's API in order to create a new page.
+  Takes the authentication token and the new page's content as parameters"
+  [token data]
   (http/post
    "https://api.notion.com/v1/pages/"
    {:headers {"Authorization" (str "Bearer " token)}
     :content-type :json
     :body data}))
 
-(defn create-page [token body]
+(defn create-page
+  "Creates a new page in Notion.
+  Takes the authentication token and the new page's content/body as parameters"
+  [token body]
   (if (validate-page-creation body)
     (json/parse-string (:body (post-page token (json/encode body))) true)
     {:error "page-body doesn't match the page spec"}))
 
-(defn patch-page [token id data]
+(defn patch-page
+  "Makes a PATCH request to Notion's API in order to change a page's properties.
+  Takes the authentication token, the page's id, and the new page's properties as parameters"
+  [token id data]
   (http/patch
    (str "https://api.notion.com/v1/pages/" id)
    {:headers {"Authorization" (str "Bearer " token)}
     :content-type :json
     :body data}))
 
-(defn update-page [token id body]
+(defn update-page
+  "Update a page's properties based off of it's unique id.
+  Takes the authentication token, a page's id and a page's new properties as parameters"
+  [token id body]
   (json/parse-string (:body (patch-page token id (json/encode body))) true))

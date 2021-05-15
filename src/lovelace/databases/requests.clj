@@ -4,36 +4,32 @@
             [lovelace.databases.specs :refer [validate-db-query]]))
 
 (defn fetch-database
+  "Makes a GET request to Notion's database API and retrieves the data from a database.
+  Takes the authentication token and the database's id as parameters"
   [token id]
   (http/get
    (str "https://api.notion.com/v1/databases/" id)
    {:headers {"Authorization" (str "Bearer " token)}}))
 
-(defn get-database [token id]
-  ;  {:title title
-  ;   :id id
-  ;   :created_time created_time
-  ;   :last_edited_time last_edited_time
-  ;   :properties properties
-  ;   :Type Type
-  ;   :Publisher Publisher
-  ;   :Summary Summary
-  ;   :Link Link
-  ;   :Read Read
-  ;   :Author Author
-  ;   :Name Name
-  ;   :Status Status
-  ;   :Publishing Publishing]
+(defn get-database
+  "Retrieves data from a database based off of it's unique id.
+  Takes the authentication token and the database's id as parameters"
+  [token id]
   (json/parse-string (:body (fetch-database token id)) true))
 
-(defn post-database [token id data]
+(defn post-database
+  "Makes a POST request to Notion's database API and searches data within a certain database.
+  Takes the authentication token, the database's id and the query to search for data within the database"
+  [token id data]
   (http/post
    (str "https://api.notion.com/v1/databases/" id "/query")
    {:headers {"Authorization" (str "Bearer " token)}
     :content-type :json
     :body data}))
 
-(defn query-database [token id query]
+(defn query-database
+  "Queries a Notion database. Takes the authentication token, the database's id and a query as parameters"
+  [token id query]
   (if (validate-db-query query)
     (json/parse-string (:body (post-database token id (json/encode query))) true)
     {:error "query doesn't match the query spec"}))
