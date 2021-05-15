@@ -1,4 +1,4 @@
-(defproject lovelace "0.1.1"
+(defproject org.clojars.arthurbarroso/lovelace "0.1.1"
             :description "A Clojure wrapper around Notion's API"
             :url "http://github.com/arthurbarroso/lovelace"
             :license {:name "MIT"
