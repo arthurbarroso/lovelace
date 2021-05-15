@@ -18,11 +18,11 @@
     (http/get
      url
      req)
-    (catch Exception e {:error (.getMessage e)}))
+    (catch Exception e {:error (.getMessage e)})))
 
-  (defn safe-post [url req]
-    (try
-      (http/post
-       url
-       req)
-      (catch Exception e {:error (.getMessage e)}))))
+(defn safe-post [url req]
+  (try
+    (http/post
+     url
+     req)
+    (catch Exception e {:error (.getMessage e)})))
