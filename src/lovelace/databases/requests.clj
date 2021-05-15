@@ -29,8 +29,9 @@
 (defn post-database [token id data]
   (http/post
    (str "https://api.notion.com/v1/databases/" id "/query")
-   {:headers {"Authorization" (str "Bearer " token)}}
-   :body data))
+   {:headers {"Authorization" (str "Bearer " token)}
+    :content-type :json
+    :body data}))
 
 (defn query-database [token id query]
   (if (validate-db-query query)
