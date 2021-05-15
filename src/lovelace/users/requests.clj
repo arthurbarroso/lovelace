@@ -2,8 +2,6 @@
   (:require [clj-http.client :as http]
             [cheshire.core :as json]))
 
-(def my-token "c")
-
 (defn fetch-users
   ([token]
    (http/get
@@ -28,7 +26,3 @@
   (let [response (fetch-users token id)
         parsed-response (json/parse-string (get-in response [:body]) true)]
     {:results parsed-response}))
-
-(comment
-  (get-all-users my-token)
-  (get-single-user my-token my-id))
