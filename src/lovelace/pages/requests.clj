@@ -12,7 +12,6 @@
   (json/parse-string (:body (get-page token id)) true))
 
 (defn post-page [token data]
-  (println "b" data)
   (http/post
    "https://api.notion.com/v1/pages/"
    {:headers {"Authorization" (str "Bearer " token)}
@@ -22,4 +21,4 @@
 (defn create-page [token body]
   (if (validate-page-creation body)
     (json/parse-string (:body (post-page token (json/encode body))) true)
-    {:error "Your page body doesn't match the page spec"}))
+    {:error "page-body doesn't match the page spec"}))

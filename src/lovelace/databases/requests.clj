@@ -36,4 +36,4 @@
 (defn query-database [token id query]
   (if (validate-db-query query)
     (json/parse-string (:body (post-database token id (json/encode query))) true)
-    {:error "Your query doesn't match the query spec"}))
+    {:error "query doesn't match the query spec"}))
