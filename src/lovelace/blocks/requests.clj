@@ -6,19 +6,29 @@
 
 (defn get-block
   "Makes a GET request to Notion's block API and retrieves the data from a block.
-  Takes the authentication token, the block's id and the page size as parameters"
-  [token id page-size]
-  (http/get
-   (str "https://api.notion.com/v1/blocks/" id "/children?page_size=" page-size)
-   (make-request token)))
+  Takes the authentication token, the block's id and the page size as parameters.
+  Also takes an optional start-cursor parameter to paginate."
+  ([token id page-size]
+   (http/get
+    (str "https://api.notion.com/v1/blocks/" id "/children?page_size=" page-size)
+    (make-request token)))
+  ([token id page-size start-cursor]
+   (http/get
+    (str "https://api.notion.com/v1/blocks/" id "/children?page_size=" page-size "&start_cursor=" start-cursor)
+    (make-request token))))
 
 (defn retrieve-block
   "Retrieves data/children from a block.
-  Takes the authentication token, the block's id and the page size as parameters"
-  [token id page-size]
-  (if (validate-page-size page-size)
-    (json/parse-string (:body (get-block token id page-size)) true)
-    {:error "page-size must be an integer and must be greater than zero"}))
+  Takes the authentication token, the block's id and the page size as parameters.
+  Also takes an optional start-cursor parameter to paginate."
+  ([token id page-size]
+   (if (validate-page-size page-size)
+     (json/parse-string (:body (get-block token id page-size)) true)
+     {:error "page-size must be an integer and must be greater than zero"}))
+  ([token id page-size start-cursor]
+   (if (validate-page-size page-size)
+     (json/parse-string (:body (get-block token id page-size start-cursor)) true)
+     {:error "page-size must be an integer and must be greater than zero"})))
 
 (defn patch-block
   "Makes a PATCH request to Notion's API in order to append a children to a block.
