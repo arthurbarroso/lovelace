@@ -6,7 +6,7 @@
 (defn validate-page-size [page-size]
   (s/valid? ::page-size page-size))
 
-(s/def ::children (s/keys :req-un [::object ::type]))
+(s/def ::children (s/every (s/keys :req-un [::object ::type])))
 (s/def ::body (s/keys :req-un [::children]))
 
 (defn validate-block-body [body]
