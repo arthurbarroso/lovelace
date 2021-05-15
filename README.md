@@ -35,7 +35,8 @@ Lovelace is a library designed to act as a Clojure wrapper around [Notion's API]
                                                  {:property "Name", :title {:equals "New Media Article"}}]}
                                                :sorts [{:property "Name", :direction "ascending"}]})
   (users/list-all-users my-token)
-  (users/retrieve-user my-token my-user-id))
+  (users/retrieve-user my-token my-user-id)
+  (list-databases my-token 3 "cursor"))
 ```
 
 All functions that returns lists of objects can also make use of pagination by taking `page-size` and `start-cursor` arguments. Please check the docstrings for `blocks/retrieve-block-children`, `databases/query-database` and `user/list-all-users` to learn more about it.
