@@ -7,7 +7,7 @@
 (defn get-block
   "Makes a GET request to Notion's block API and retrieves the data from a block.
   Takes the authentication token, the block's id and the page size as parameters.
-  Also takes an optional start-cursor parameter to paginate."
+  Also takes an optional `start-cursor` parameter to paginate."
   ([token id page-size]
    (http/get
     (str "https://api.notion.com/v1/blocks/" id "/children?page_size=" page-size)
@@ -20,7 +20,7 @@
 (defn retrieve-block
   "Retrieves data/children from a block.
   Takes the authentication token, the block's id and the page size as parameters.
-  Also takes an optional start-cursor parameter to paginate."
+  Also takes an optional `start-cursor` parameter to paginate."
   ([token id page-size]
    (if (validate-page-size page-size)
      (json/parse-string (:body (get-block token id page-size)) true)
