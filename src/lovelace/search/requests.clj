@@ -1,13 +1,13 @@
 (ns lovelace.search.requests
-  (:require [clj-http.client :as http]
-            [cheshire.core :as json]
-            [lovelace.search.specs :refer [validate-query]]
-            [lovelace.utils :refer [make-request]]))
+  (:require
+   [cheshire.core :as json]
+   [lovelace.search.specs :refer [validate-query]]
+   [lovelace.utils :refer [make-request safe-post]]))
 
 (defn search-post
   "Makes a POST request to Notion's API. Takes both the authentication token and the query as parameters"
   [token data]
-  (http/post
+  (safe-post
    "https://api.notion.com/v1/search"
    (make-request token data)))
 
@@ -16,5 +16,8 @@
   Takes the authentication token and a search query as parameters"
   [token query]
   (if (validate-query query)
-    (json/parse-string (:body (search-post token (json/encode query))) true)
+    (let [response (search-post token (json/encode query))]
+      (if (:error response)
+        response
+        (json/parse-string (:body response) true)))
     {:error "query didn't match the spec"}))
